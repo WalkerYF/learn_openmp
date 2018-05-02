@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
-#define MATRIX_SIZE 700
+#define MATRIX_SIZE 900
 using namespace std;
 
 typedef double matrix_t;
@@ -12,26 +12,17 @@ matrix_t lhs[MATRIX_SIZE][MATRIX_SIZE];
 matrix_t rhs[MATRIX_SIZE][MATRIX_SIZE];
 matrix_t ans[MATRIX_SIZE][MATRIX_SIZE];
 void product(){
-    # pragma omp parallel for
+
+    # pragma omp parallel
+    # pragma omp for collapse(3)
     for (int i = 0; i < MATRIX_SIZE; i++){
-        # pragma omp parallel for
         for (int j = 0; j < MATRIX_SIZE; j++){
-            # pragma omp parallel for
             for (int k = 0; k < MATRIX_SIZE; k++){
                 ans[i][j] += lhs[i][k]*rhs[k][j];
             }
         }
     }
 }
-// void product(){
-//     for (int i = 0; i < MATRIX_SIZE; i++){
-//         for (int j = 0; j < MATRIX_SIZE; j++){
-//             for (int k = 0; k < MATRIX_SIZE; k++){
-//                 ans[i][j] += lhs[i][k]*rhs[k][j];
-//             }
-//         }
-//     }
-// }
 
 void print_matrix(matrix_t mat[][MATRIX_SIZE]){
     for (int i = 0; i < MATRIX_SIZE; i++){
@@ -67,7 +58,7 @@ int main(){
     init_matrix(ans);
 
     clock_t startTime,endTime;
-    int repeat_time = 2;
+    int repeat_time = 3;
     double full_time = 0;
     for (int i = 0;i < repeat_time; i++){
         startTime = clock();

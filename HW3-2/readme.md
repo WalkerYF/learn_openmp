@@ -23,20 +23,26 @@ Consider a simple loop that calls a function dummy containing a programmable del
 Implement and test the OpenMP program for computing a matrix-matrix (50 * 50) product. Use the OMP_NUM_THREADS environment veriable to control the number of threads and plot the performance with varying numbers of threads. Consider three cases in which 
 (i)only the outermost loop is parallelized.
 (ii)the outer two loops are parallelized. 
-and (iii) all three loops are parallelized. 
+(iii) all three loops are parallelized. 
+
 What is the observed result from these three cases?
 
-### 实验假设
+### 实验前提
 
 #### 矩阵规模
-在测试过程中发现，50*50的矩阵乘法规模太小，导致在输出时间的时候只会输出0。出于便于研究，易于对比数据的目的，此后研究的矩阵乘法均是TODO:矩阵规模。
+
+在测试过程中发现，50*50的矩阵乘法规模太小，导致在输出时间的时候在大多数情况下只会输出0。出于便于研究，易于对比数据的目的，此后研究的矩阵乘法均是TODO:矩阵规模。
 
 #### 运行性能的评价
 
-此后在评价矩阵乘法的性能时，主要以两个维度来进行评价。
+本次实验在评价矩阵乘法的性能时，主要以两个维度来进行评价。
 
 1. $T_{ave}$矩阵乘法运行的平均时间（运行三次取平均值），单位为秒。
-1. $\mu$加速比：程序可优化部分占程序执行时间总体的比例。
+1. $S_p = \frac{T_1}{T_p}$加速比：串行运行的时间除以并行运行的时间。
+    1. ${\displaystyle T_{1}}$指顺序执行算法的执行时间
+    1. ${\displaystyle T_{p}}$指当有p个线程时，并行算法的执行时间
+1. $E_p = \frac{S_p}{p}$效率
+    1. $p$是指线程数量。
 
 https://zh.wikipedia.org/wiki/%E5%8A%A0%E9%80%9F%E6%AF%94
 
