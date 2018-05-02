@@ -6,8 +6,8 @@
 #include <omp.h>
 using namespace std;
 
-#define MATRIX_SIZE 1200
-#define COLLAPSE_NUM 1
+#define MATRIX_SIZE 200
+#define COLLAPSE_NUM 3
 
 typedef double matrix_t;
 
@@ -17,8 +17,8 @@ matrix_t ans[MATRIX_SIZE][MATRIX_SIZE];
 
 void product(){
     for (int i = 0; i < MATRIX_SIZE; i++){
+        for (int k = 0; k < MATRIX_SIZE; k++){
         for (int j = 0; j < MATRIX_SIZE; j++){
-            for (int k = 0; k < MATRIX_SIZE; k++){
                 ans[i][j] += lhs[i][k]*rhs[k][j];
             }
         }
@@ -27,14 +27,14 @@ void product(){
 
 void parallel_product(){
     # pragma omp parallel
-    # pragma omp for collapse(COLLAPSE_NUM)
+    # pragma omp for collapse(3)
     // # pragma omp for
     for (int i = 0; i < MATRIX_SIZE; i++){
+        for (int k = 0; k < MATRIX_SIZE; k++){
         for (int j = 0; j < MATRIX_SIZE; j++){
-            for (int k = 0; k < MATRIX_SIZE; k++){
                 ans[i][j] += lhs[i][k]*rhs[k][j];
             }
-            cout << "pid : " << omp_get_thread_num() << endl;
+            // printf("pid:%d \n", omp_get_thread_num());
         }
     }
 }
@@ -88,11 +88,14 @@ void get_time(void (*func)(), int repeat_time = 2){
     // cout << "average_wall_time : " << average_wall_time << endl;
     cout << COLLAPSE_NUM << "," << MATRIX_SIZE << ","  << average_cpu_time << "," << average_wall_time << endl;
 }
-int main(){
+int main(int argc, char* argv[]){
     make_matrix(lhs,1);
     make_matrix(rhs,2);
     init_matrix(ans);
-    // omp_set_num_threads(200);
+    int num_thread = stoi(argv[1]);
+    // cout << "num_thread:" << num_thread << endl;
+    omp_set_num_threads(num_thread);
+    // cout << "omp_get_num_threads():" << omp_get_num_threads() << endl;
     #ifdef SIMGLE
     get_time(product);
     #endif
