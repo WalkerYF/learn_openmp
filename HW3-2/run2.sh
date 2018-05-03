@@ -1,8 +1,9 @@
 #!/bin/bash
 # cpp 文件名，嵌套层数，矩阵大小，是否优化（OPT,NOT_OPT)
 #输入输入
-g++.exe $1 -o a.exe -fopenmp -std=c++11 -D SINGLE -D COLLAPSE_NUM=$2 -D MATRIX_SIZE=$3 -D $4
-g++.exe $1 -o b.exe -fopenmp -std=c++11 -D PARALLEL -D COLLAPSE_NUM=$2 -D MATRIX_SIZE=$3 -D $4
+# EXE=.exe
+g++$EXE $1 -o a.exe -fopenmp -std=c++11 -D SINGLE -D COLLAPSE_NUM=$2 -D MATRIX_SIZE=$3 -D $4
+g++$EXE $1 -o b.exe -fopenmp -std=c++11 -D PARALLEL -D COLLAPSE_NUM=$2 -D MATRIX_SIZE=$3 -D $4
 SAVE_DATA_FILE=$5
 
 # 串行时间的计算
