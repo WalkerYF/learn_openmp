@@ -3,11 +3,22 @@
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
+#include <cstring>
 #include <omp.h>
 using namespace std;
+#ifndef MATRIX_SIZE
+#define MATRIX_SIZE 1200
+#endif
 
-#define MATRIX_SIZE 200
-#define COLLAPSE_NUM 3
+#ifndef COLLAPSE_NUM
+#define COLLAPSE_NUM 1
+#endif
+// #ifndef OPT
+// #define OPT 1
+// #endif
+// #ifndef NOT_OPT
+// #define NOT_OPT 
+// #endif
 
 typedef double matrix_t;
 
@@ -17,9 +28,16 @@ matrix_t ans[MATRIX_SIZE][MATRIX_SIZE];
 
 void product(){
     for (int i = 0; i < MATRIX_SIZE; i++){
+        #ifdef OPT
         for (int k = 0; k < MATRIX_SIZE; k++){
-        for (int j = 0; j < MATRIX_SIZE; j++){
+            for (int j = 0; j < MATRIX_SIZE; j++){
                 ans[i][j] += lhs[i][k]*rhs[k][j];
+        #endif
+        #ifdef NOT_OPT
+        for (int j = 0; j < MATRIX_SIZE; j++){
+            for (int k = 0; k < MATRIX_SIZE; k++){
+                ans[i][j] += lhs[i][k]*rhs[k][j];
+        #endif
             }
         }
     }
@@ -27,11 +45,16 @@ void product(){
 
 void parallel_product(){
     # pragma omp parallel
-    # pragma omp for collapse(3)
-    // # pragma omp for
+    # pragma omp for collapse(COLLAPSE_NUM)
     for (int i = 0; i < MATRIX_SIZE; i++){
+        #ifdef OPT
         for (int k = 0; k < MATRIX_SIZE; k++){
+            for (int j = 0; j < MATRIX_SIZE; j++){
+        #endif
+        #ifdef NOT_OPT
         for (int j = 0; j < MATRIX_SIZE; j++){
+            for (int k = 0; k < MATRIX_SIZE; k++){
+        #endif
                 ans[i][j] += lhs[i][k]*rhs[k][j];
             }
             // printf("pid:%d \n", omp_get_thread_num());
@@ -86,22 +109,38 @@ void get_time(void (*func)(), int repeat_time = 2){
     double average_wall_time = full_wall_time / repeat_time;
     // cout << "average_cpu_time : " << average_cpu_time << endl;
     // cout << "average_wall_time : " << average_wall_time << endl;
-    cout << COLLAPSE_NUM << "," << MATRIX_SIZE << ","  << average_cpu_time << "," << average_wall_time << endl;
+    #ifdef OPT
+    cout << COLLAPSE_NUM << "," << MATRIX_SIZE << ","  << average_cpu_time << "," << average_wall_time << "," << 1 << endl;
+    #endif
+    #ifdef NOT_OPT
+    cout << COLLAPSE_NUM << "," << MATRIX_SIZE << ","  << average_cpu_time << "," << average_wall_time << "," << 0 << endl;
+    #endif
 }
+
+int str_to_int(char * str){
+    int len = strlen(str);
+    int num = 0;
+    for (int i = 0; i < len; i++){
+        num = (str[i]-'0') + num * 10;
+    }
+    return num;
+}
+
 int main(int argc, char* argv[]){
+    // cout << MATRIX_SIZE << endl;
     make_matrix(lhs,1);
     make_matrix(rhs,2);
     init_matrix(ans);
-    int num_thread = stoi(argv[1]);
+    int num_thread = str_to_int(argv[1]);
     // cout << "num_thread:" << num_thread << endl;
+    // cout << "num_thread:" << str_to_int(num_thread) << endl;
     omp_set_num_threads(num_thread);
     // cout << "omp_get_num_threads():" << omp_get_num_threads() << endl;
-    #ifdef SIMGLE
+    #ifdef SINGLE
     get_time(product);
     #endif
     #ifdef PARALLEL
     get_time(parallel_product);
     #endif
-    // print_matrix(ans);
     return 0;
 }
