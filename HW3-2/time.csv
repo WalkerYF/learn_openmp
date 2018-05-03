@@ -1,9 +1,0 @@
-1,
-2,omp_get_num_threads():1 1,1200,4.8355,4.8345
-4,omp_get_num_threads():1 1,1200,2.9585,2.958
-6,omp_get_num_threads():1 1,1200,2.9695,2.9685
-8,omp_get_num_threads():1 1,1200,3.1275,3.1265
-10,omp_get_num_threads():1 1,1200,2.769,2.7675
-20,omp_get_num_threads():1 1,1200,2.8675,2.8665
-30,omp_get_num_threads():1 1,1200,2.823,2.8215
-40,omp_get_num_threads():1 1,1200,2.7895,2.787
