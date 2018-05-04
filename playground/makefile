@@ -1,3 +1,3 @@
-TARGET=./16.1-nested-para.cpp
+TARGET=./t.cpp
 a.out:$(TARGET)
 	g++ $(TARGET) -o a.out -fopenmp
