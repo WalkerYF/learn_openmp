@@ -58,3 +58,5 @@ for ((variable=$MIN_TRUNK;variable<=$MAX_TRUNK;variable = variable+1));do
     echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"
     ./b.exe >> $SAVE_DATA_FILE
 done
+
+rm *.exe
