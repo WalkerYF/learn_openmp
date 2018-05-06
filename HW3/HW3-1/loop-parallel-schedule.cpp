@@ -14,7 +14,7 @@ int data[DELAY_MAX_TIMES][DELAY_MAX_TIMES];
 int sum = 0;
 
 void delay(int times){
-    #pragma omp for schedule(runtime)
+    #pragma omp for schedule(runtime) collapse(2)
     for (int i = 0; i < times; i++){
         for (int j = 0; j < times; j++){
             #ifdef NO_CACHE

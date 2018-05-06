@@ -28,8 +28,8 @@ done
 
 
 # 设置参数变化情况
-MIN_TRUNK=10
-MAX_TRUNK=1
+MIN_TRUNK=1000
+MAX_TRUNK=1001
 # 先进行一次不使用参数的
 export OMP_SCHEDULE="dynamic"
 echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"
@@ -43,8 +43,8 @@ done
 
 
 # 设置参数变化情况
-MIN_TRUNK=10
-MAX_TRUNK=1
+MIN_TRUNK=100
+MAX_TRUNK=100
 # 先进行一次不使用参数的
 export OMP_SCHEDULE="guided"
 echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"
