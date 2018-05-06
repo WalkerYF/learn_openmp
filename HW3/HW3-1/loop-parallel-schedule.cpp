@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include <omp.h>
 using namespace std;
 
@@ -13,7 +14,6 @@ using namespace std;
 // #ifndef DELAY_TIMES
 // #define DELAY_TIMES 10000
 // #endif
-
 
 int data[DELAY_MAX_TIMES][DELAY_MAX_TIMES];
 int sum = 0;
