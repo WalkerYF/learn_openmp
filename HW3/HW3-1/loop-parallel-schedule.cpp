@@ -10,11 +10,33 @@ using namespace std;
 #define DELAY_MAX_TIMES 10000
 #endif
 
+#ifndef DELAY_TIMES
+#define DELAY_TIMES 10000
+#endif
+
+
 int data[DELAY_MAX_TIMES][DELAY_MAX_TIMES];
 int sum = 0;
+int num_threads = 0;
+
+void parallel_delay(int times){
+    #pragma omp parallel
+    num_threads = omp_get_num_threads();
+    #pragma omp for schedule(runtime) collapse(2)
+    for (int i = 0; i < times; i++){
+        for (int j = 0; j < times; j++){
+            #ifdef NO_CACHE
+            sum += i*j;
+            #endif
+            #ifdef USE_CACHE
+            data[i][j] = i*j;
+            #endif
+        }
+    }
+}
 
 void delay(int times){
-    #pragma omp for schedule(runtime) collapse(2)
+    num_threads = omp_get_num_threads();
     for (int i = 0; i < times; i++){
         for (int j = 0; j < times; j++){
             #ifdef NO_CACHE
@@ -45,6 +67,8 @@ void get_time(void (*func)(int ),int delay_times, int repeat_time = 3){
     omp_sched_t this_kind;
     int chunk_num = 0;
     omp_get_schedule(&this_kind, &chunk_num);
+
+    cout << num_threads << ",";
     #ifdef NO_CACHE
     cout << 0 << ",";
     #endif
@@ -59,7 +83,12 @@ int main(){
     omp_set_num_threads(4);
     // 对不同的延时均进行测试
     for (int i = DELAY_MIN_TIMES; i <= DELAY_MAX_TIMES; i = i+1000){
+        #ifdef PARALLEL
+        get_time(parallel_delay, i);
+        #endif
+        #ifdef SINGLE
         get_time(delay, i);
+        #endif
     }
     return 0;
 }

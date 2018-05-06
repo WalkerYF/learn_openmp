@@ -14,12 +14,15 @@ Consider a simple loop that calls a function dummy containing a programmable del
 
 将这个循环使用几种不同的调度方法分配给四个线程（可使用static，dynamic，guided等调度方法）
 
+对这些调度方法使用不同的参数。
+
 当函数内的延迟渐渐变大时，将这个实验的结果写出来。
 
-### 参考答案
+### 分析方法
 
-When the function becomes computationally expensive, all of the formulations can be expected to perform
-similarly.
+1. 研究每一个调度方法与参数之间的关系
+    1. 同一种调度方法，当
+
 
 ## 第二题
 
