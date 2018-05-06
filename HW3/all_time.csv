@@ -1,3 +1,4 @@
+num_thread,collaspe,size,cputime,walltime,cache_opt
 1,1,1200,8.06698,8.07755,1
 2,1,1200,8.13736,4.0848,1
 4,1,1200,16.2321,4.18094,1

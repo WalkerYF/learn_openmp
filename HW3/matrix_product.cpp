@@ -13,12 +13,6 @@ using namespace std;
 #ifndef COLLAPSE_NUM
 #define COLLAPSE_NUM 1
 #endif
-// #ifndef OPT
-// #define OPT 1
-// #endif
-// #ifndef NOT_OPT
-// #define NOT_OPT 
-// #endif
 
 typedef double matrix_t;
 

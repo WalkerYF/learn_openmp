@@ -12,7 +12,7 @@ Consider a simple loop that calls a function dummy containing a programmable del
 
 对这个函数的每一次调用与其他的调用都是相互独立，互不影响的。
 
-将这个循环使用几种不同的调度方法分配给四个线程（可使用static，dynamic，等调度方法）
+将这个循环使用几种不同的调度方法分配给四个线程（可使用static，dynamic，guided等调度方法）
 
 当函数内的延迟渐渐变大时，将这个实验的结果写出来。
 
