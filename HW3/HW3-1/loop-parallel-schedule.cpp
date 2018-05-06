@@ -33,8 +33,8 @@ void parallel_delay(int times){
                 data[i][j] = i*j;
                 #endif
             }
-            cout << omp_get_thread_num() << endl;
-            cout << omp_get_num_threads() << endl;
+            // cout << omp_get_thread_num() << endl;
+            // cout << omp_get_num_threads() << endl;
         }
     }
 }
