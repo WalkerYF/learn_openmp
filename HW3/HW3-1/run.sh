@@ -35,7 +35,7 @@ MIN_TRUNK=1000
 MAX_TRUNK=1001
 # 先进行一次不使用参数的
 export OMP_SCHEDULE="dynamic"
-echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"
+# echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"
 ./b.exe >> $SAVE_DATA_FILE
 # 参数意义：每次分配的迭代次数
 for ((variable=$MIN_TRUNK;variable<=$MAX_TRUNK;variable = variable+1));do
