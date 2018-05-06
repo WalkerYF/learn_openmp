@@ -4,7 +4,7 @@
 
 ### 题目
 
-Consider a simple loop that calls a function dummy containing a programmable delay.All invocations of the function are independent of the others. Partition this loop across four threads using static, dynamic, and guided scheduling. Document the result of this experiment as the delay within the dummy function becomes large.
+Consider a simple loop that calls a function dummy containing a programmable delay.All invocations of the function are independent of the others. Partition this loop across four threads using static, dynamic, and guided scheduling. scheduling. Use different parameters for static and guided scheduling.Document the result of this experiment as the delay within the dummy function becomes large.
 
 ### 题目分析
 
@@ -36,11 +36,15 @@ What is the observed result from these three cases?
 
 #### 矩阵规模
 
-在测试过程中发现，50*50的矩阵乘法规模太小，导致在输出时间的时候在大多数情况下只会输出0。出于便于研究，易于对比数据的目的，此后研究的矩阵乘法均是TODO:矩阵规模。
+在测试过程中发现，50*50的矩阵乘法规模太小，导致在输出时间的时候在大多数情况下只会输出0。出于便于研究，易于对比数据的目的，此后研究的矩阵乘法均是1200维下的矩阵乘法。
+
+#### 测试环境
+
+在我自己电脑进行测试的时候，由于我一边用我自己的电脑完成作业，一边跑程序，跑出来的时间波动过大，看不出规律，因此，对于测试环境，要求要尽可能少的活动进程，本次作业的数据，我是在宿舍的一台没有人用的电脑跑的，保证了运行环境没有过多的其他进程的干扰。
 
 #### 运行性能的评价
 
-本次实验在评价矩阵乘法的性能时，主要以两个维度来进行评价。
+本次实验在评价矩阵乘法的性能时，主要以运行时间来进行评价。
 
 1. $T_{ave}$矩阵乘法运行的平均时间（运行三次取平均值），单位为秒。
 1. $S_p = \frac{T_1}{T_p}$加速比：串行运行的时间除以并行运行的时间。
@@ -69,41 +73,47 @@ void product(){
 }
 ```
 
-从注释中，可以看到代码块中的三个循环外都具有一个用于OpenMP的并行化宏指令。下面的三个部分，研究了这些宏指令的三种情况，分别对应本题的三个小问。
+在OpenMP编译指令中，可以见到`collapse`，其后的数字表明并行化的循环层数，根据这个层数，我分为三种情况来研究，这三种情况分别对应题目的三小问。
 
 1. 情况一：最外层循环并行化
 1. 情况二：两层循环并行化
 1. 情况三：三层循环并行化
 
-> 注意，这里并未考虑为cache读写优化的矩阵乘法
+#### 对cache优化的简单矩阵乘法
 
-### 情况一
+考虑到计时不准的缘故，尽量的减少I/O时间能够提高实验结果的准确度。因此我对该矩阵乘法做了一些不影响并行度的对`cache`友好的优化，再重复进行了一次实验。
 
-当只有最外层有宏指令的时候，
+优化后的代码如此实现,通过将第二层循环和第三层循环交换位置，提高该矩阵乘法的空间局部性，从而减少程序cache不命中的情况。
 
-在只有一层循环并行化的情况下，设置环境变量`OMP_NUM_THREADS`为20，计算700阶的矩阵乘法，得到下面的结果。
+```cpp
+void product(){
+    # pragma omp parallel for collapse(3)
+    // 该参数用于设置并行到哪一个级别的循环
+    for (int i = 0; i < MATRIX_SIZE; i++){
+        for (int k = 0; k < MATRIX_SIZE; k++){
+            for (int j = 0; j < MATRIX_SIZE; j++){
+                ans[i][j] += lhs[i][k]*rhs[k][j];
+            }
+        }
+    }
+}
+```
 
-![](figure/2018-05-02-13-46-53.png)
+### 未优化情况下，三种情况的对比。
 
-|测试类型|运行时间|
-|-|-|
-|具有多线程优化 | 0.948s|
-|没有多线程优化 | 2.349s|
+本程序在物理双核，逻辑四核的笔记本上运行，并记录运行时间。
+当运行线程数控制在1-30范围中时，下图为运行时间随线程数量变化的图。
+![](figure/2018-05-06-16-50-54.png)
 
-很明显，在具有多线程优化的情况下，该矩阵乘法运行得更快。
+当运行线程数控制在1-850范围中时，下图为运行时间随线程熟练变化的图。
+![](figure/2018-05-06-16-51-58.png)
 
-csv:
-线程数量,并行循环层数,矩阵维度,CPU时间,Wall时间
+运行时间数据详见[all_time.csv](./HW3-2/all_time.csv)。
 
-#### 两层循环并行化
 
-慢了
+### 实验结果
 
-#### 三层循环并行化
+1. 在对cache没有优化的矩阵乘法中，运行时间波动大，从中反映的运行时间规律不明确。相对而言，对cache优化后的矩阵乘法总体运行时间波动较小，反映的规律较为可信。
+1. 从对cache优化过的矩阵乘法得出的结果可知，三层循环都并行化时，运行时间总是会比其他两种情况长约3.5%。
 
-更慢
 
-### 实验结果及分析
-
-1. 横向的比较中，对嵌套循环并行度的设置不同，运行的时间也略有差异
-1. 在纵向的比较中，线程数越多，矩阵运算的时间越短？？

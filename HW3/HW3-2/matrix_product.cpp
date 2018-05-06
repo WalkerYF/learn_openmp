@@ -84,7 +84,7 @@ void init_matrix(matrix_t mat[][MATRIX_SIZE]){
     }
 }
 
-void get_time(void (*func)(), int repeat_time = 2){
+void get_time(void (*func)(), int repeat_time = 3){
     // TODO:设置重复次数
     clock_t startTime,endTime;
     double wall_time = 0;
