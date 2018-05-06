@@ -2,7 +2,7 @@
 # EXE=.exe  用于在wsl下运行window程序，在linux下请注释这条
 FILE_NAME=loop-parallel-schedule.cpp
 SAVE_DATA_FILE=all_time.csv
-DELAY_MIN_TIMES=10000
+DELAY_MIN_TIMES=1000
 DELAY_MAX_TIMES=10001
 # 设置程序对CACHE的使用，有NO_CACHE和USE_CACHE两种
 CACHE_FLAG=NO_CACHE
@@ -46,8 +46,8 @@ done
 
 
 # 设置参数变化情况
-MIN_TRUNK=100
-MAX_TRUNK=100
+MIN_TRUNK=10
+MAX_TRUNK=10
 # 先进行一次不使用参数的
 export OMP_SCHEDULE="guided"
 echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"

@@ -82,7 +82,7 @@ void get_time(void (*func)(int ),int delay_times, int repeat_time = 3){
 int main(){
     omp_set_num_threads(4);
     // 对不同的延时均进行测试
-    for (int i = DELAY_MIN_TIMES; i <= DELAY_MAX_TIMES; i = i+1000){
+    for (int i = DELAY_MIN_TIMES; i <= DELAY_MAX_TIMES; i = i+100){
         #ifdef PARALLEL
         get_time(parallel_delay, i);
         #endif
