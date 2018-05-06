@@ -10,9 +10,9 @@ using namespace std;
 #define DELAY_MAX_TIMES 10000
 #endif
 
-#ifndef DELAY_TIMES
-#define DELAY_TIMES 10000
-#endif
+// #ifndef DELAY_TIMES
+// #define DELAY_TIMES 10000
+// #endif
 
 
 int data[DELAY_MAX_TIMES][DELAY_MAX_TIMES];
@@ -22,7 +22,7 @@ int num_threads = 0;
 void parallel_delay(int times){
     #pragma omp parallel
     num_threads = omp_get_num_threads();
-    #pragma omp for schedule(runtime) collapse(2)
+    #pragma omp for schedule(runtime)
     for (int i = 0; i < times; i++){
         for (int j = 0; j < times; j++){
             #ifdef NO_CACHE
