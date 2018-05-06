@@ -20,17 +20,21 @@ int sum = 0;
 int num_threads = 0;
 
 void parallel_delay(int times){
-    #pragma omp parallel
-    num_threads = omp_get_num_threads();
-    #pragma omp for schedule(runtime)
-    for (int i = 0; i < times; i++){
-        for (int j = 0; j < times; j++){
-            #ifdef NO_CACHE
-            sum += i*j;
-            #endif
-            #ifdef USE_CACHE
-            data[i][j] = i*j;
-            #endif
+    # pragma omp parallel
+    {
+        num_threads = omp_get_num_threads();
+        # pragma omp for schedule(runtime)
+        for (int i = 0; i < times; i++){
+            for (int j = 0; j < times; j++){
+                #ifdef NO_CACHE
+                sum += i*j;
+                #endif
+                #ifdef USE_CACHE
+                data[i][j] = i*j;
+                #endif
+            }
+            cout << omp_get_thread_num() << endl;
+            cout << omp_get_num_threads() << endl;
         }
     }
 }
