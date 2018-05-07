@@ -24,10 +24,6 @@ Consider a simple loop that calls a function dummy containing a programmable del
 
 ### 分析方法
 
-1. 人为选择一个比较合适的参数，然后跑出对应的运行时间。
-    1. 对不同的延迟，适当选择不同的参数。
-    1. 延迟渐渐增大，
-1. 画一个图
 
 
 ## 第二题
