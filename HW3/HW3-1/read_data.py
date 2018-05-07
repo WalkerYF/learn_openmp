@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 file_name = 'all_time.csv'
 fd = pd.read_csv(file_name,header=0)
-all_series_times = fd[fd.num_thread == 1].set_index(['delay_times']).sort_index()
+all_series_times = fd[fd.num_thread == 1].set_index(['delay_times'])
+all_series_times = all_series_times.loc[~all_series_times.index.duplicated(keep='first')].sort_index()
 # print(all_series_times)
 # print(all_series_times.loc[1000])
 
@@ -18,7 +19,9 @@ def get_column(num_thread, schedule_flag, chunk_num):
     temp2 = temp.set_index(['delay_times'])
     temp3 = temp2.loc[~temp2.index.duplicated(keep='first')]
     # 获取串行时间，并计算加速比
-    temp3['speedup'] = temp3.apply(lambda row: all_series_times.loc[row.name]['walltime']/row['walltime'] , axis=1)
+    # temp3['speedup'] = temp3.apply(lambda row: print(row['walltime']) , axis=1)
+    temp3['speedup'] = temp3.apply(lambda row: (all_series_times.loc[row.name]['walltime']/row['walltime']) , axis=1)
+    # temp3['speedup'] = temp3.apply(lambda row: row['walltime'] , axis=1)
     return temp3.loc[:,['speedup']].sort_index()
 
 # 提取一列，索引为chunk_num, 内容为对应的walltime
@@ -32,9 +35,9 @@ def get_column_chunk_num(num_thread, cache_flag, schedule_flag, delay_times):
         (fd.delay_times == delay_times)
     ]
     temp2 = temp.set_index(['chunk_num'])
-    temp3 = temp2.loc[~temp2.index.duplicated(keep='first')].loc[:,['walltime']]
+    temp3 = temp2.loc[~temp2.index.duplicated(keep='first')].loc[:,['walltime', 'delay_times']]
     # print(temp3)
-    temp3['speedup'] = temp3.apply(lambda row: series_time / row['walltime'], axis=1)
+    temp3['speedup'] = temp3.apply(lambda row: all_series_times.loc[row.delay_times]['walltime'] / row['walltime'], axis=1)
     return temp3.loc[:,['speedup']].sort_index()
 
 # 提取另一列，索引为chunk_num, 内容为对应的walltime
@@ -78,6 +81,22 @@ def draw_dynamic_walltime_and_chunk_num(all_delay_times):
     all_column.plot()
     plt.show()
 
+# 画出dynamic与chunk_num之间的关系，参数为delay_times
+def draw_guided_walltime_and_chunk_num(all_delay_times):
+    all_column = pd.concat(
+        [
+            # delay_times == 1000
+            get_column_chunk_num(4,0,3,delay_times) for delay_times in all_delay_times
+        ],
+        axis=1,
+        keys=[
+            'delay_times == '+str(delay_times) for delay_times in all_delay_times
+        ]
+    )
+    all_column.plot()
+    plt.show()
 
-draw_image_from_columns(1000,401)
-draw_dynamic_walltime_and_chunk_num([100 + i*1000 for i in range(0, 10)])
+
+# draw_image_from_columns(1000,401)
+# draw_dynamic_walltime_and_chunk_num([100 + i*300 for i in range(0, 9)])
+draw_guided_walltime_and_chunk_num([100 + i*300 for i in range(0, 9)])

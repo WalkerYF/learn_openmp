@@ -20,9 +20,25 @@ Consider a simple loop that calls a function dummy containing a programmable del
 
 ### 评价指标
 
-1. 加速比
+1. 对于不同的延时，多线程程序运行的效率主要看加速比。
+    1. 本来延时就不同，看运行速度是没办法判断的。
 
 ### 分析方法
+
+#### 研究问题1
+
+对于dynamic调度方法，chunk_num选取的值多少为合适？
+
+于是画了一个dynamic调度方法中，运行时间与chunk_num的变化关系，此时delay_times选取为100 - 2500 间隔为300。
+
+![](./HW3-1/figure/dynamic_chunk_num100-2000.png)
+
+
+#### 研究问题2
+
+对于guided调度方法，chunk_num选取的值多少为合适
+
+guided调度方法中，加速比与chunk_num之间的关系。此时delaytimes 选取我100 - 2500
 
 
 
