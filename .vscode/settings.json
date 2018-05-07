@@ -47,5 +47,6 @@
         "valarray": "cpp",
         "stack": "cpp"
     },
-    "latex-workshop.debug.showUpdateMessage": false
+    "latex-workshop.debug.showUpdateMessage": false,
+    "latex-workshop.message.update.show": false
 }

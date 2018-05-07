@@ -38,8 +38,23 @@ Consider a simple loop that calls a function dummy containing a programmable del
 
 对于guided调度方法，chunk_num选取的值多少为合适
 
-guided调度方法中，加速比与chunk_num之间的关系。此时delaytimes 选取我100 - 2500
+guided调度方法中，加速比与chunk_num之间的关系。此时delaytimes 选取我100 - 1500
 
+![]("./HW3-1/figure/guided_chunk_num1-1500.png)
+
+
+#### 研究问题3
+
+延迟渐渐变大后，使用各调度方法后加速比的变化。
+
+dynamic调度方法采取chunk_num=1000(delay_timess=1000)
+guided调度方法采取chunk_num=900
+
+delay_times
+
+运行延时从100-10000变化
+
+加速比的变化如下图
 
 
 ## 第二题

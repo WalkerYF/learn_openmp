@@ -97,6 +97,6 @@ def draw_guided_walltime_and_chunk_num(all_delay_times):
     plt.show()
 
 
-# draw_image_from_columns(1000,401)
+draw_image_from_columns(1000,910)
 # draw_dynamic_walltime_and_chunk_num([100 + i*300 for i in range(0, 9)])
-draw_guided_walltime_and_chunk_num([100 + i*300 for i in range(0, 9)])
+# draw_guided_walltime_and_chunk_num([100 + i*300 for i in range(0, 9)])
