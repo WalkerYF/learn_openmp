@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 
 file_name = 'all_time.csv'
 fd = pd.read_csv(file_name,header=0)
-
+all_series_times = fd[fd.num_thread == 1].set_index(['delay_times']).sort_index()
+# print(all_series_times)
+# print(all_series_times.loc[1000])
 
 # 提取一列, 索引为delay_times, 内容为对应的walltime
 # 参数提供各种flag过滤
@@ -15,7 +17,9 @@ def get_column(num_thread, schedule_flag, chunk_num):
         temp = fd[(fd.num_thread == num_thread) & (fd.schedule == schedule_flag) & (fd.chunk_num == chunk_num) & (fd.cache_flag == 0)]
     temp2 = temp.set_index(['delay_times'])
     temp3 = temp2.loc[~temp2.index.duplicated(keep='first')]
-    return temp3.loc[:,['walltime']].sort_index()
+    # 获取串行时间，并计算加速比
+    temp3['speedup'] = temp3.apply(lambda row: all_series_times.loc[row.name]['walltime']/row['walltime'] , axis=1)
+    return temp3.loc[:,['speedup']].sort_index()
 
 # 提取一列，索引为chunk_num, 内容为对应的walltime
 # 改进：得到加速比
@@ -29,7 +33,7 @@ def get_column_chunk_num(num_thread, cache_flag, schedule_flag, delay_times):
     ]
     temp2 = temp.set_index(['chunk_num'])
     temp3 = temp2.loc[~temp2.index.duplicated(keep='first')].loc[:,['walltime']]
-    print(temp3)
+    # print(temp3)
     temp3['speedup'] = temp3.apply(lambda row: series_time / row['walltime'], axis=1)
     return temp3.loc[:,['speedup']].sort_index()
 
@@ -75,5 +79,5 @@ def draw_dynamic_walltime_and_chunk_num(all_delay_times):
     plt.show()
 
 
-# draw_image_from_columns(1000,401)
+draw_image_from_columns(1000,401)
 draw_dynamic_walltime_and_chunk_num([100 + i*1000 for i in range(0, 10)])
