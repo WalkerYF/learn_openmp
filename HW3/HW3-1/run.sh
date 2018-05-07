@@ -31,8 +31,8 @@ echo "complie completed!"
 
 
 # 设置参数变化情况
-MIN_TRUNK=2550
-MAX_TRUNK=4000
+MIN_TRUNK=4050
+MAX_TRUNK=5000
 # 先进行一次不使用参数的
 export OMP_SCHEDULE="dynamic"
 # echo "|OMP_SCHEDULE:$OMP_SCHEDULE|"
