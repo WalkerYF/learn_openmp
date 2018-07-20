@@ -40,7 +40,7 @@ Consider a simple loop that calls a function dummy containing a programmable del
 
 guided调度方法中，加速比与chunk_num之间的关系。此时delaytimes 选取我100 - 1500
 
-![]("./HW3-1/figure/guided_chunk_num1-1500.png)
+![](./HW3-1/figure/guided_chunk_num1-1500.png)
 
 
 #### 研究问题3
@@ -55,6 +55,10 @@ delay_times
 运行延时从100-10000变化
 
 加速比的变化如下图
+
+![](./HW3-1/figure/all_to10000.png)
+
+![](./HW3-1/figure/all_2.png)
 
 
 ## 第二题
